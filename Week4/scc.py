@@ -1,6 +1,10 @@
-import random, copy
+from collections import defaultdict
+import resource
+import sys
 
-
+#set rescursion limit and stack size limit
+sys.setrecursionlimit(10 ** 6)
+resource.setrlimit(resource.RLIMIT_STACK, (2 ** 29, 2 ** 30))
 
 class Track(object):
     """Keeps track of explored, time, source, leader, et cetera"""

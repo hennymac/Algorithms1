@@ -1,4 +1,9 @@
+import resource
+import sys
 
+#set rescursion limit and stack size limit
+sys.setrecursionlimit(10 ** 6)
+resource.setrlimit(resource.RLIMIT_STACK, (2 ** 29, 2 ** 30))
 
 class Track(object):
     """Keeps track of explored, time, source, leader, et cetera"""
@@ -13,16 +18,6 @@ class Track(object):
         """adds node to SCC group"""
         self.leader[self.current_source] = self.leader.get(self.current_source,[]) + [node]
 
-def scc(graph,reverse_graph,nodes):
-
-    explored = [False for i in range(len(nodes))]
-    track = Track(explored)
-    dfs_loop(reverse_graph,nodes,track)
-    sorted_nodes = sorted(track.finish_times, key=track.finish_times.get,reverse=True)
-    explored = [False for i in range(len(nodes))]
-    track = Track(explored)
-    dfs_loop(graph,sorted_nodes,track)
-    return track
 
 def dfs(graph,start,track):
     track.explored[start] = True
@@ -39,6 +34,17 @@ def dfs_loop(graph,nodes,track):
         if not track.explored[node]:
             track.current_source = node
             dfs(graph,node,track)
+
+def scc(graph,reverse_graph,nodes):
+
+    explored = [False for i in range(len(nodes))]
+    track = Track(explored)
+    dfs_loop(reverse_graph,nodes,track)
+    sorted_nodes = sorted(track.finish_times, key=track.finish_times.get,reverse=True)
+    explored = [False for i in range(len(nodes))]
+    track = Track(explored)
+    dfs_loop(graph,sorted_nodes,track)
+    return track
 
 def loaddata(filename):
 
